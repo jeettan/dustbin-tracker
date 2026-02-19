@@ -11,7 +11,7 @@ const ProtectedRoutes = () => {
 
     const res = await authAPI()
 
-    if (res.data.loggedIn == true && res.data.isAdmin == true) {
+    if (res.data.loggedIn === true && res.data.isAdmin === true) {
 
       setUser(true)
     } else {

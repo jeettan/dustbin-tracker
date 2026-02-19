@@ -35,16 +35,11 @@ function AdminDashboard() {
 
   useEffect(() => {
 
-    const x = pins.filter(pin => pin.id == selectedId);
+    const x = pins.filter(pin => pin.id === selectedId);
     setSelectedPin(x[0])
 
-  }, [selectedId])
+  }, [selectedId, pins])
 
-  useEffect(() => {
-
-    console.log(pins)
-
-  }, [pins])
 
   async function deletePin() {
 
@@ -124,7 +119,7 @@ function AdminDashboard() {
         </div>
 
         {selectedPin && (<div className={styles.imageContainer}>
-          <img src={selectedPin.pic_link} />
+          <img src={selectedPin.pic_link} alt="pic" />
         </div>)}
 
       </div>

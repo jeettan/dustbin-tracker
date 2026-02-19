@@ -1,12 +1,15 @@
 .App {
-  background: linear-gradient(to left, #0b3d91, #4facfe);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 100vh;
   padding: 25px;
   color: white;
+  background-image: url("../../../public/bg.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .mapContainer {

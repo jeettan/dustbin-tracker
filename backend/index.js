@@ -21,7 +21,7 @@ const PORT = process.env.PORT || 3001
 
 app.use(session({
     name: "connect.sid",
-    secret: 'secret123',
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
@@ -74,7 +74,11 @@ app.post('/register-user', upload.none(), async (req, res) => {
             return res.status(400).json({ message: "All fields are required" });
         }
 
-        const existingUser = await pool.query(`SELECT 1 FROM users WHERE username='${username}' LIMIT 1`)
+        const existingUser = await pool.query(
+            'SELECT 1 FROM users WHERE username = $1 LIMIT 1',
+            [username]
+        );
+
 
         if (existingUser.rowCount > 0) {
             return res.status(400).json({ message: "User already exists" });
@@ -82,7 +86,10 @@ app.post('/register-user', upload.none(), async (req, res) => {
 
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        const newUser = await pool.query(`INSERT INTO users (username, password) VALUES ('${username}','${hashedPassword}')`)
+        const newUser = await pool.query(
+            'INSERT INTO users (username, password) VALUES ($1, $2)',
+            [username, hashedPassword]
+        );
 
         res.status(201).json({
             message: "User registered successfully",
@@ -104,7 +111,7 @@ app.post('/login', async (req, res) => {
 
         const { username, password } = req.body;
 
-        const result = await pool.query(`SELECT * FROM users WHERE username = '${username}'`);
+        const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
         if (result.rows.length == 0) {
             return res.status(401).json({ error: "Invalid credentials" });
@@ -151,7 +158,7 @@ app.post('/registerPin', upload.single('pic'), async (req, res) => {
         const public_id = uploadCloudinary.public_id
         const url = uploadCloudinary.secure_url;
 
-        const insert = await pool.query(`INSERT INTO unapproved_pins (name, lat, lng, pic_link, public_id, user_id) VALUES ('${name}', '${lat}', '${lng}', '${url}', '${public_id}', '${req.session.user.id}')`)
+        const insert = await pool.query('INSERT INTO unapproved_pins (name, lat, lng, pic_link, public_id, user_id) VALUES ($1, $2, $3, $4, $5, $6)', [name, lat, lng, url, public_id, req.session.user.id])
 
         fs.unlink(req.file.path, (err) => {
             if (err) {
@@ -229,9 +236,9 @@ app.post('/delete-pin', async (req, res) => {
 
     try {
 
-        let public_id = await pool.query(`SELECT public_id FROM unapproved_pins WHERE id=${req.body.id} LIMIT 1`);
+        let public_id = await pool.query('SELECT public_id FROM unapproved_pins WHERE id=$1 LIMIT 1', [req.body.id]);
         await cloudinary.uploader.destroy(public_id.rows[0].public_id);
-        let delete_pin = await pool.query(`DELETE FROM unapproved_pins WHERE id=${req.body.id}`)
+        let delete_pin = await pool.query('DELETE FROM unapproved_pins WHERE id=$1', [req.body.id])
 
         return res.status(200).json(delete_pin)
 
@@ -256,7 +263,7 @@ app.post('/approve-pin', async (req, res) => {
 
     try {
 
-        let q = await pool.query(`SELECT * FROM unapproved_pins WHERE id=${req.body.id} LIMIT 1`)
+        let q = await pool.query('SELECT * FROM unapproved_pins WHERE id=$1 LIMIT 1', [req.body.id])
 
         let selected = q.rows[0]
 
@@ -264,10 +271,10 @@ app.post('/approve-pin', async (req, res) => {
             folder: "Dustbin Tracker App/ApprovedPins",
         });
 
-        const insert = await pool.query(`INSERT INTO pins (name, lat, lng, pic_link) VALUES ('${selected.name}', '${selected.lat}', '${selected.lng}', '${uploadCloudinary.secure_url}')`)
+        const insert = await pool.query('INSERT INTO pins (name, lat, lng, pic_link) VALUES ($1, $2, $3, $4)', [selected.name, selected.lat, selected.lng, uploadCloudinary.secure_url])
 
         await cloudinary.uploader.destroy(selected.public_id);
-        await pool.query(`DELETE FROM unapproved_pins WHERE id=${req.body.id}`)
+        await pool.query('DELETE FROM unapproved_pins WHERE id=$1', [req.body.id])
 
         return res.status(200).json(insert)
 
