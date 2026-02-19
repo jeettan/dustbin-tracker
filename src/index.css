@@ -1,0 +1,12 @@
+html,
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  font-family: "Raleway", sans-serif;
+  box-sizing: border-box;
+}
+
+:root {
+  --bs-body-font-family: "Raleway", sans-serif;
+}

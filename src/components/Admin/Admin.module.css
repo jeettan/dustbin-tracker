@@ -1,0 +1,72 @@
+.App {
+  background: linear-gradient(to left, #0b3d91, #4facfe);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 25px;
+  color: white;
+}
+
+.mapContainer {
+  width: 600px;
+  display: flex;
+  box-shadow: 0 4px 12px rgba(1, 1, 1, 0.09);
+  border: 1px solid gray;
+}
+
+.upperContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+  justify-content: center;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+.tableContainer {
+  width: 1000px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.imageContainer {
+  width: 300px;
+  height: 300px;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+}
+
+.tableStyle {
+  overflow-x: auto;
+}
+
+.selectedRow {
+  background-color: #e2e2e2 !important;
+  transition: background-color 0.2s ease;
+}
+
+@media (max-width: 576px) {
+  .mapContainer {
+    width: 250px;
+  }
+
+  .tableContainer {
+    width: 100%;
+  }
+
+  .imageContainer {
+    width: 150px;
+    height: 150px;
+  }
+
+  .upperContainer {
+    flex-direction: column;
+    height: 100%;
+  }
+}

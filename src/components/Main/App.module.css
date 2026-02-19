@@ -1,0 +1,120 @@
+body .App {
+  text-align: center;
+  height: 100vh;
+  color: white;
+  padding: 0;
+}
+
+.main {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.mapContainer {
+  width: 600px;
+  display: flex;
+  box-shadow: 0 4px 12px rgba(1, 1, 1, 0.09);
+  border: 1px solid gray;
+  border-radius: 3%;
+  justify-content: center;
+}
+
+.leftPanel {
+  flex: 4;
+  background: linear-gradient(to left, #0b3d91, #4facfe);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.rightPanel {
+  background-color: white;
+  flex: 1;
+  height: 100%;
+  padding: 15px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: black;
+}
+
+.main h2 {
+  font-size: 32px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.login {
+  position: absolute;
+  top: 0;
+  padding: 30px;
+  right: 0;
+}
+
+.login:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.formLogin {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+#buttonc {
+  display: block;
+  margin-inline: auto;
+}
+
+.pc {
+  display: block;
+  margin-inline: auto;
+}
+
+.imageContainerTest {
+  width: 50px;
+  height: 50px;
+  background-color: red;
+  overflow: hidden;
+}
+
+.imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (max-width: 576px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .leftPanel {
+    flex-direction: column;
+    height: 100%;
+  }
+
+  .mapContainer {
+    width: 350px;
+  }
+
+  body .App {
+    height: 180vh;
+  }
+}
