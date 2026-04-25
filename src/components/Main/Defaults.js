@@ -2,6 +2,7 @@ import { Icon } from 'leaflet'
 
 export const sw_corner = [13.690, 100.530]
 export const ne_corner = [13.800, 100.650]
+
 export const map_center = [13.726505166739049, 100.58380122844527]
 export const defaultMarkerPosition = [13.725836300080076, 100.58303117752077]
 
@@ -23,11 +24,13 @@ export const customStyles = {
 export const defaultPin = new Icon({
 
   iconUrl: "/pin.svg",
-  iconSize: [38, 38]
+  iconSize: [38, 38],
+  iconAnchor: [19, 38]
 })
 
 export const selectedPin = new Icon({
 
   iconUrl: "/pin_selected.svg",
-  iconSize: [38, 38]
+  iconSize: [38, 38],
+  iconAnchor: [19, 38]
 })

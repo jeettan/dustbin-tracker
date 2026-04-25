@@ -18,6 +18,6 @@ Approving pins, the functionality should:
 
 # Setting pins - edge cases
 
-1. When trying to put a pin in a NON-boundaried zone, produce an error
+1. When trying to put a pin in a NON-boundaried zone, produce an error. Test with all 4 coord (up down left and right) -P 
 2. Enter a pin name that is 200+ lines long
 3. Enter a pin name with weird special characters - '@HASJKD)(J DA/)~~'

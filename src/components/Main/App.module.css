@@ -120,4 +120,13 @@ form {
   body .App {
     height: 180vh;
   }
+
+  .rightPanel {
+    margin-bottom: 35px;
+    padding: 30px;
+  }
+
+  .login {
+    position: static;
+  }
 }

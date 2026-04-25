@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button';
 import { defaultPin, map_center, sw_corner, ne_corner } from '../Main/Defaults.js'
 import { ToastContainer, toast } from 'react-toastify';
+import { Link } from 'react-router-dom'
 
 function AdminDashboard() {
 
@@ -160,6 +161,7 @@ function AdminDashboard() {
           <Button variant="danger" onClick={deletePin} disabled={loading}>Delete</Button>
         </div>
       </div>
+      <Link to="/" style={{ marginTop: "30px", color: "white" }}>Back</Link>
     </div>
 
   </>)

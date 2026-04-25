@@ -226,12 +226,8 @@ app.post('/delete-pin', async (req, res) => {
 
     let user = req.session.user
 
-    if (!user) {
-        return res.status(400).json({ message: "Not logged in" })
-    }
-
-    if (!user.isAdmin) {
-        return res.status(400).json({ message: "Not admin" })
+    if (!user || !user.isAdmin) {
+        return res.status(400).json({ message: "Access denied" })
     }
 
     try {
@@ -253,12 +249,8 @@ app.post('/approve-pin', async (req, res) => {
 
     let user = req.session.user
 
-    if (!user) {
-        return res.status(400).json({ message: "Not logged in" })
-    }
-
-    if (!user.isAdmin) {
-        return res.status(400).json({ message: "Not admin" })
+    if (!user || !user.isAdmin) {
+        return res.status(400).json({ message: "Access denied" })
     }
 
     try {
@@ -290,3 +282,4 @@ app.listen(PORT, () => {
 })
 
 module.exports = app;
+

@@ -187,6 +187,17 @@ const App = () => {
     const username = registerRef.current.elements.user.value
     const password = registerRef.current.elements.pwd.value
 
+    const usernameValid = /^[a-zA-Z0-9]{3,}$/.test(username);
+    const passwordValid = /^[a-zA-Z0-9]{6,}$/.test(password);
+
+    console.log(usernameValid)
+    console.log(passwordValid)
+
+    if (!usernameValid || !passwordValid) {
+      toast.error("Invalid characters for password or username")
+      return
+    }
+
     try {
 
       await registerAPI({ username, password })
@@ -210,6 +221,13 @@ const App = () => {
       await logoutAPI()
       toast("Logged out!")
       setLoggedIn(false)
+
+      setUserDetails({
+        id: "",
+        username: "",
+        isAdmin: false
+      })
+
 
     } catch (err) {
 
@@ -300,7 +318,7 @@ const App = () => {
 
               {markers.map((pin) => {
 
-                return <Marker key={pin.id} position={[pin['lat'], pin['lng']]} icon={defaultPin}>
+                return <Marker key={pin.id} position={[pin['lat'], pin['lng']]} icon={defaultPin} >
                   <Popup><h3>{pin['name']}</h3><img src={pin['pic_link']} width={180} height={140} alt="hello"></img></Popup>
                 </Marker>
               })}
@@ -310,6 +328,15 @@ const App = () => {
                 position={markerPosition} icon={selectedPin} eventHandlers={{
                   dragend: (e) => {
                     const { lat, lng } = e.target.getLatLng();
+
+                    if (lat < sw_corner[0] || lat > ne_corner[0] || lng < sw_corner[1] || lng > ne_corner[1]) {
+
+                      toast.error("Out of bounds");
+                      deleteMarker()
+                      return
+
+                    }
+
                     setMarkerPosition([lat, lng])
                     console.log("Marker dragged to:", lat, lng);
                   },
@@ -322,7 +349,7 @@ const App = () => {
             Marker latitude/longitude: {markerPosition[0]}, {markerPosition[1]}
           </p>
 
-          {userDetails.isAdmin ? <Link to='/admin' style={{ textDecoration: "none", color: "inherit" }}> <Button variant="warning">Admin Dashboard</Button></Link> : ""}
+          {userDetails.isAdmin ? <Link to='/admin' style={{ textDecoration: "none", color: "inherit", marginBottom: "30px" }}> <Button variant="warning">Admin Dashboard</Button></Link> : ""}
 
         </div>
         <div className={styles.rightPanel}>
@@ -336,7 +363,15 @@ const App = () => {
           <h3>Upload</h3>
           <p>Register your pin as proof here.</p>
           <form onSubmit={addNewPin}>
-            <Form.Control type="text" placeholder="Enter your pin name*" onChange={handlePinChange} value={pinName} required />
+            <Form.Control type="text" placeholder="Enter your pin name*" onChange={(e) => {
+              handlePinChange(e); if (!/^[a-zA-Z0-9 ]*$/.test(e.target.value)) {
+                e.target.setCustomValidity("Only letters, numbers, and spaces allowed.");
+              } else {
+                e.target.setCustomValidity(""); // clear when valid
+              }
+            }} value={pinName} minLength={3} maxLength={20} pattern="^[a-zA-Z0-9 ]+$" onInvalid={(e) => {
+              e.target.setCustomValidity("Only letters, numbers, and spaces allowed.");
+            }} required />
             <input type="file" accept="image/*" id="photo-upload" name="photo-upload" onChange={onFileChange} ref={fileInputRef} required />
             {selectedFile ? <img src={displayFile} alt="Uploaded preview" width={250} height={150} /> : ""}
             <Button variant="primary" type="submit" disabled={loading}>{loading ? <ClipLoader color={"white"} size={20} cssOverride={override} loading={loading} /> : "Submit"}</Button>
