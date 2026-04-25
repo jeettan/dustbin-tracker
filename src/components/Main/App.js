@@ -151,7 +151,6 @@ const App = () => {
       setDisplayFile(null)
       fileInputRef.current.value = "";
     }
-
   }
 
   async function loginClick(e) {
@@ -167,6 +166,11 @@ const App = () => {
       checkForLogin();
 
     } catch (err) {
+
+      if (err.response === undefined) {
+        toast.error("Network error. Cannot connect to server")
+        return
+      }
 
       const error_message = err.response.data.error;
       toast.error("Login failed. " + error_message)
