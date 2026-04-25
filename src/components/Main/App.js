@@ -194,9 +194,6 @@ const App = () => {
     const usernameValid = /^[a-zA-Z0-9]{3,}$/.test(username);
     const passwordValid = /^[a-zA-Z0-9]{6,}$/.test(password);
 
-    console.log(usernameValid)
-    console.log(passwordValid)
-
     if (!usernameValid || !passwordValid) {
       toast.error("Invalid characters for password or username")
       return
