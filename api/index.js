@@ -40,7 +40,6 @@ app.use(cors({
 
 app.set("trust proxy", 1);
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
@@ -58,14 +57,14 @@ app.get('/', (req, res) => {
 
 })
 
-app.get('/pins', async (req, res) => {
+app.get('/api/pins', async (req, res) => {
 
     const pins = await pool.query('SELECT * FROM pins');
     res.send(pins.rows)
 
 })
 
-app.post('/register-user', upload.none(), async (req, res) => {
+app.post('/api/register-user', upload.none(), async (req, res) => {
 
     try {
         const { username, password } = req.body;
@@ -105,7 +104,7 @@ app.post('/register-user', upload.none(), async (req, res) => {
 
 })
 
-app.post('/login', async (req, res) => {
+app.post('/api/login', async (req, res) => {
 
     try {
 
@@ -139,7 +138,7 @@ app.post('/login', async (req, res) => {
     }
 })
 
-app.post('/registerPin', upload.single('pic'), async (req, res) => {
+app.post('/api/registerPin', upload.single('pic'), async (req, res) => {
 
     try {
 
@@ -175,7 +174,7 @@ app.post('/registerPin', upload.single('pic'), async (req, res) => {
     }
 })
 
-app.get('/auth/profile', (req, res) => {
+app.get('/api/auth/profile', (req, res) => {
 
     let user = req.session.user
     if (req.session.user) {
@@ -185,7 +184,7 @@ app.get('/auth/profile', (req, res) => {
     }
 })
 
-app.get('/logout', (req, res) => {
+app.get('/api/logout', (req, res) => {
 
     req.session.destroy((err) => {
         if (err) {
@@ -197,7 +196,7 @@ app.get('/logout', (req, res) => {
     });
 });
 
-app.get('/unapproved-pins', async (req, res) => {
+app.get('/api/unapproved-pins', async (req, res) => {
 
     let user = req.session.user
 
@@ -222,7 +221,7 @@ app.get('/unapproved-pins', async (req, res) => {
 
 })
 
-app.post('/delete-pin', async (req, res) => {
+app.post('/api/delete-pin', async (req, res) => {
 
     let user = req.session.user
 
@@ -245,7 +244,7 @@ app.post('/delete-pin', async (req, res) => {
 
 })
 
-app.post('/approve-pin', async (req, res) => {
+app.post('/api/approve-pin', async (req, res) => {
 
     let user = req.session.user
 

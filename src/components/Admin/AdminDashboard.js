@@ -12,7 +12,7 @@ function AdminDashboard() {
 
   function getPins() {
 
-    axios.get('http://localhost:3001/unapproved-pins', { withCredentials: true }).then((res) => {
+    axios.get(`${process.env.REACT_APP_API_URL}/api/unapproved-pins`, { withCredentials: true }).then((res) => {
 
       setPins(res.data)
     }
@@ -44,7 +44,6 @@ function AdminDashboard() {
 
   async function deletePin() {
 
-
     if (selectedId == null) {
 
       toast.error("No pin selected")
@@ -53,7 +52,7 @@ function AdminDashboard() {
 
     setLoading(true)
 
-    axios.post('http://localhost:3001/delete-pin', { id: selectedId }, { withCredentials: true }).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/delete-pin`, { id: selectedId }, { withCredentials: true }).then((res) => {
 
       toast("Pin deleted")
 
@@ -82,7 +81,7 @@ function AdminDashboard() {
 
     setLoading(true)
 
-    axios.post('http://localhost:3001/approve-pin', { id: selectedId }, { withCredentials: true }).then((res) => {
+    axios.post(`${process.env.REACT_APP_API_URL}/api/approve-pin`, { id: selectedId }, { withCredentials: true }).then((res) => {
 
       toast("Pin successfully approved")
     }).catch((err) => {

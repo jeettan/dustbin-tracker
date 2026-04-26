@@ -10,3 +10,7 @@ body {
 :root {
   --bs-body-font-family: "Raleway", sans-serif;
 }
+
+h2 {
+  font-size: clamp(0.5rem, 4vw, 2.5rem);
+}
