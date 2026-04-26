@@ -4,7 +4,7 @@ const morgan = require('morgan');
 const { Pool } = require('pg');
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2;
-const fs = require("fs");
+const { Readable } = require('stream');  // Added for buffer upload
 const bcrypt = require('bcrypt');
 let session = require('express-session')
 
@@ -51,6 +51,20 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
+// Helper function to upload buffer to Cloudinary
+const uploadToCloudinary = (buffer) => {
+    return new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+            { folder: "Dustbin Tracker App/UnapprovedPins" },
+            (error, result) => {
+                if (error) return reject(error);
+                resolve(result);
+            }
+        );
+        Readable.from(buffer).pipe(uploadStream);
+    });
+};
 
 app.get('/', (req, res) => {
 
@@ -152,20 +166,15 @@ app.post('/api/registerPin', upload.single('pic'), async (req, res) => {
             return res.status(400).json({ error: "No file uploaded" });
         }
 
-        const uploadCloudinary = await cloudinary.uploader.upload(req.file.buffer, {
-            folder: "Dustbin Tracker App/UnapprovedPins",
-        });
+        // Updated to use buffer upload helper
+        const uploadCloudinary = await uploadToCloudinary(req.file.buffer);
 
         const public_id = uploadCloudinary.public_id
         const url = uploadCloudinary.secure_url;
 
         const insert = await pool.query('INSERT INTO unapproved_pins (name, lat, lng, pic_link, public_id, user_id) VALUES ($1, $2, $3, $4, $5, $6)', [name, lat, lng, url, public_id, req.session.user.id])
 
-        fs.unlink(req.file.buffer, (err) => {
-            if (err) {
-                console.error("Failed to delete local file:", err);
-            }
-        });
+        // Removed invalid fs.unlink for buffer
 
         res.json(insert)
 
@@ -283,4 +292,3 @@ app.listen(PORT, () => {
 })
 
 module.exports = app;
-
