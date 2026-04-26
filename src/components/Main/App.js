@@ -317,7 +317,7 @@ const App = () => {
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
               />
 
-              {markers.map((pin) => {
+              {Array.isArray(markers) && markers.map((pin) => {
 
                 return <Marker key={pin.id} position={[pin['lat'], pin['lng']]} icon={defaultPin} >
                   <Popup><h3>{pin['name']}</h3><img src={pin['pic_link']} width={180} height={140} alt="hello"></img></Popup>

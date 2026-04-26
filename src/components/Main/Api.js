@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export const registerPinAPI = async (formData) => {
-
     return axios.post(`${process.env.REACT_APP_API_URL}/api/registerPin`, formData, {
         withCredentials: true,
         headers: {
@@ -33,8 +32,6 @@ export const authAPI = async () => {
 }
 
 export const pinsAPI = async () => {
-
-    console.log("test", process.env.REACT_APP_API_URL)
 
     return axios.get(`${process.env.REACT_APP_API_URL}/api/pins`)
 }
