@@ -10,7 +10,9 @@ let session = require('express-session')
 
 require('dotenv').config();
 
-const upload = multer({ dest: "uploads/" });
+const storage = multer.memoryStorage();
+
+const upload = multer({ storage });
 
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL
@@ -150,7 +152,7 @@ app.post('/api/registerPin', upload.single('pic'), async (req, res) => {
             return res.status(400).json({ error: "No file uploaded" });
         }
 
-        const uploadCloudinary = await cloudinary.uploader.upload(req.file.path, {
+        const uploadCloudinary = await cloudinary.uploader.upload(req.file.buffer, {
             folder: "Dustbin Tracker App/UnapprovedPins",
         });
 
@@ -159,7 +161,7 @@ app.post('/api/registerPin', upload.single('pic'), async (req, res) => {
 
         const insert = await pool.query('INSERT INTO unapproved_pins (name, lat, lng, pic_link, public_id, user_id) VALUES ($1, $2, $3, $4, $5, $6)', [name, lat, lng, url, public_id, req.session.user.id])
 
-        fs.unlink(req.file.path, (err) => {
+        fs.unlink(req.file.buffer, (err) => {
             if (err) {
                 console.error("Failed to delete local file:", err);
             }
